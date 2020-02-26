@@ -49,6 +49,12 @@ def get_user_groups(user, start=None, limit=None):
             return
         start = r_data['nextPageStart']
 
+def get_proj_details(project):
+    endpoint = url + "/rest/api/1.0/projects/" + project
+    r = session.get(endpoint)
+    r_data = r.json()
+    print(r_data)
+
 def get_proj_group_details(project, start=None, limit=None):
     while True:
         params = {'start': start, 'limit': limit}
@@ -72,6 +78,12 @@ def get_proj_user_details(project, start=None, limit=None):
         if r_data['isLastPage'] == True:
             return
         start = r_data['nextPageStart']
+
+def get_repo_details(proj, repo):
+    endpoint = url + "/rest/api/1.0/projects/" + proj + "/repos/" + repo
+    r = session.get(endpoint)
+    r_data = r.json()
+    print(r_data)
 
 def get_repo_group_details(proj, repo, start=None, limit=None):
     while True:
@@ -113,6 +125,7 @@ def get_info():
     print("\n=====PROJECT=====")
     for project in projects:
         print(f"==={project}===")
+        get_proj_details(project)
         print(f"Group data for project {project}:")
         get_proj_group_details(project.upper())
         print(f"User data for project {project}:")
@@ -122,6 +135,7 @@ def get_info():
     for pair in repos:
         proj = pair.split(':')[0].upper()
         repo = pair.split(':')[1].lower()
+        get_repo_details(proj,repo)
         print(f"==={proj}==={repo}===")
         print(f"Group data for repo {repo}:")
         get_repo_group_details(proj, repo)
